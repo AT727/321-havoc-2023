@@ -42,7 +42,7 @@ public final class Constants {
         public static final double kg = 0; // gravity FF most likely only tune this gain
         public static final double kv = 0;
         public static final double ka = 0;
-        public static final ArmFeedforward ANCHOR_FEEDFORWARD = new ArmFeedforward(ks, kg, kv, ka);
+        public static ArmFeedforward ANCHOR_FEEDFORWARD = new ArmFeedforward(ks, kg, kv, ka);
       }
 
       public static final class MP {
@@ -85,7 +85,7 @@ public final class Constants {
         public static final double kP = 0;
         public static final double kI = 0;
         public static final double kD = 0;
-        public static final int kSlot = 2;
+        public static final int kSlot = 0;
       }
 
       public static final class FF {
