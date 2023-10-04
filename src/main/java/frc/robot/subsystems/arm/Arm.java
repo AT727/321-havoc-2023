@@ -10,6 +10,9 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import com.revrobotics.SparkMaxPIDController;
+
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -107,6 +110,41 @@ public class Arm extends SubsystemBase {
     return floatingEncoder.getVelocity();
   }
 
+  public void initTuneControllers(){
+    SmartDashboard.putNumber("anchorKP", SmartDashboard.getNumber("anchorKP", Constants.Arm.Anchor.PID.kP));
+    SmartDashboard.putNumber("anchorKI", SmartDashboard.getNumber("anchorKI", Constants.Arm.Anchor.PID.kI));
+    SmartDashboard.putNumber("anchorKD", SmartDashboard.getNumber("anchorKD", Constants.Arm.Anchor.PID.kD));
+    SmartDashboard.putNumber("anchorKFF", SmartDashboard.getNumber("anchorKFF", Constants.Arm.Anchor.FF.kg));
+ 
+    SmartDashboard.putNumber("floating KP", SmartDashboard.getNumber("floatingKP", Constants.Arm.Floating.PID.kP));
+    SmartDashboard.putNumber("floatingKI", SmartDashboard.getNumber("floatingKI", Constants.Arm.Floating.PID.kI));
+    SmartDashboard.putNumber("floatingKD", SmartDashboard.getNumber("floatingKD", Constants.Arm.Floating.PID.kD));
+    SmartDashboard.putNumber("floatingKFF", SmartDashboard.getNumber("floatingKFF", Constants.Arm.Floating.FF.kg));
+ }
+
+    public void tuneControllers() {
+    // double floatingKP = SmartDashboard.getEntry("floating KP").getDouble(0);
+    // double floatingKI = SmartDashboard.getEntry("floatingKI").getDouble(0);
+    // double floatingKD = SmartDashboard.getEntry("floatingKD").getDouble(0);
+    // double floatingKFF = SmartDashboard.getEntry("floatingKFF").getDouble(0);
+    
+
+    // this.floatingPIDController.setP(floatingKP);
+    // this.floatingPIDController.setI(floatingKI);
+    // this.floatingPIDController.setD(floatingKD);
+    // this.floatingPIDController.setFF(floatingKFF);
+
+    double anchorKP = SmartDashboard.getEntry("anchorKP").getDouble(0);
+    double anchorKI = SmartDashboard.getEntry("anchorKI").getDouble(0);
+    double anchorKD = SmartDashboard.getEntry("anchorKD").getDouble(0);
+    double anchorKG = SmartDashboard.getEntry("anchorKG").getDouble(0);
+
+    this.anchorPIDController.setP(anchorKP);
+    this.anchorPIDController.setI(anchorKI);
+    this.anchorPIDController.setD(anchorKD);
+    Constants.Arm.Anchor.FF.ANCHOR_FEEDFORWARD = new ArmFeedforward(0, anchorKG, 0, 0);
+    }
+
   public static class PeriodicIO {
     public double anchorPosSetpoint = Constants.Arm.Anchor.kZeroPosition;
     public double floatingPosSetpoint = Constants.Arm.Floating.kZeroPosition;
@@ -127,6 +165,7 @@ public class Arm extends SubsystemBase {
 
   @Override
   public void periodic() {
+    tuneControllers();
     // cal FF
     periodicIO.anchorFF =
         Constants.Arm.Anchor.FF.ANCHOR_FEEDFORWARD.calculate(
