@@ -3,6 +3,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.commands.RunArm;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -15,7 +16,10 @@ public class RobotContainer {
   private Arm arm = new Arm();
 
   public RobotContainer() {
+
+    this.arm.setDefaultCommand(new RunArm(arm));
     configureBindings();
+    
   }
 
   private void configureBindings() {}
