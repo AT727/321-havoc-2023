@@ -1,26 +1,26 @@
 /* (C) Robolancers 2024 */
 package frc.robot.subsystems.arm.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.InverseArmKinematics;
+import frc.robot.util.RelativePlane;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class MoveToSetpoint extends CommandBase {
 
   private double anchorPosSetpoint;
-  private double anchorVelSetpoint;
   private double floatingPosSetpoint;
-  private double floatingVelSetpoint;
   Arm arm;
 
   public MoveToSetpoint(
-      Arm arm,
-      Constants.Arm.Anchor.Setpoints anchorSetpoint,
-      Constants.Arm.Floating.Setpoints floatingSetpoint) {
-    this.anchorPosSetpoint = anchorSetpoint.position;
-    this.anchorVelSetpoint = anchorSetpoint.velocity;
-    this.floatingPosSetpoint = floatingSetpoint.position;
-    this.floatingVelSetpoint = floatingSetpoint.position;
+      Arm arm
+      // double setpoint
+      ) {
+    // this.anchorPosSetpoint = setpoint;
+    // this.floatingPosSetpoint = floatingSetpoint.position;
     this.arm = arm;
 
     addRequirements(arm);
@@ -28,32 +28,10 @@ public class MoveToSetpoint extends CommandBase {
 
   @Override
   public void initialize() {
-    // update setpoint Pos & Vel
-    arm.periodicIO.anchorPosSetpoint = anchorPosSetpoint;
-    arm.periodicIO.anchorVelSetpoint = anchorVelSetpoint;
-    arm.periodicIO.floatingPosSetpoint = floatingPosSetpoint;
-    arm.periodicIO.floatingVelSetpoint = floatingVelSetpoint;
-
-    // //MOTION PROFILE
-    // //create new MP with setpoints & get startTime
-    // arm.periodicIO.anchorProfile = new
-    // TrapezoidProfile(Constants.Arm.Anchor.MP.ANCHOR_CONSTRAINTS,
-    // new TrapezoidProfile.State(anchorPosSetpoint, anchorVelSetpoint), new
-    // TrapezoidProfile.State(arm.getAnchorAngle(), arm.getAnchorVelocity()));
-    // arm.periodicIO.floatingProfile = new
-    // TrapezoidProfile(Constants.Arm.Floating.MP.FLOATING_CONSTRAINTS,
-    // new TrapezoidProfile.State(floatingPosSetpoint, floatingVelSetpoint), new
-    // TrapezoidProfile.State(arm.getFloatingAngle(), arm.getFloatingVelocity()));
-    // arm.periodicIO.anchorProfileStartTime = Timer.getFPGATimestamp();
-    // arm.periodicIO.floatingProfileStartTime = Timer.getFPGATimestamp();
-
-  }
-
-  @Override
-  public boolean isFinished() {
-    return arm.getAnchorVelocity() == anchorVelSetpoint
-        && arm.getAnchorAngle() == anchorPosSetpoint
-        && arm.getFloatingVelocity() == floatingVelSetpoint
-        && arm.getFloatingAngle() == floatingPosSetpoint;
+    // arm.periodicIO.anchorPosSetpoint = anchorPosSetpoint;
+    InverseArmKinematics testSetpoint = new InverseArmKinematics(new RelativePlane("test", 0), 22, 35); //inches
+    InverseArmKinematics.Angles angles = testSetpoint.getAngles();
+    arm.periodicIO.anchorPosSetpoint = angles.getAnchorAngle();
+    arm.periodicIO.floatingPosSetpoint = angles.getFloatingAngle();
   }
 }
