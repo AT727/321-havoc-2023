@@ -19,13 +19,14 @@ public class RunArm extends CommandBase {
 
   @Override
   public void execute() {
-    // cal FF
+    // PID
+    // // cal FF
     arm.periodicIO.anchorFF =
         Constants.Arm.Anchor.FF.ANCHOR_FEEDFORWARD.calculate(
-            arm.periodicIO.anchorPosSetpoint, arm.periodicIO.anchorVelSetpoint);
+            Math.toRadians(arm.periodicIO.anchorPosSetpoint), 0);
     arm.periodicIO.floatingFF =
         Constants.Arm.Floating.FF.FLOATING_FEEDFORWARD.calculate(
-            arm.periodicIO.floatingPosSetpoint, arm.periodicIO.floatingVelSetpoint);
+            Math.toRadians(arm.periodicIO.floatingPosSetpoint), 0);
 
     // set FF and setpoint
     arm.anchorPIDController.setReference(

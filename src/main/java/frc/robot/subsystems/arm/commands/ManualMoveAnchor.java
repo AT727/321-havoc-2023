@@ -7,8 +7,8 @@ import frc.robot.subsystems.arm.Arm;
 public class ManualMoveAnchor extends CommandBase {
 
   private Arm arm;
+  private double offset = 1;
   private boolean reverse;
-  private double offset;
 
   public ManualMoveAnchor(Arm arm, boolean reverse) {
     this.arm = arm;

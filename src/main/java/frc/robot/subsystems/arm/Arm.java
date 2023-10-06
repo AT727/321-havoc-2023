@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -71,8 +72,6 @@ public class Arm extends SubsystemBase {
 
     floatingEncoder.setPositionConversionFactor(Constants.Arm.Floating.Conversions.kRatio);
     floatingEncoder.setPosition(Constants.Arm.Floating.kZeroPosition);
-
-    // determine velocity by delta(x)/delta(t)
   }
 
   public void configureControllers() {
@@ -123,9 +122,6 @@ public class Arm extends SubsystemBase {
         "floatingKD", SmartDashboard.getNumber("floatingKD", Constants.Arm.Floating.PID.kD));
     SmartDashboard.putNumber(
         "floatingKG", SmartDashboard.getNumber("floatingKG", Constants.Arm.Floating.FF.kg));
-
-    SmartDashboard.putNumber(
-        "setpointPos", SmartDashboard.getNumber("setpointPos", periodicIO.anchorPosSetpoint));
   }
 
   public void tuneControllers() {
@@ -145,73 +141,29 @@ public class Arm extends SubsystemBase {
     double anchorKD = SmartDashboard.getEntry("anchorKD").getDouble(0);
     double anchorKG = SmartDashboard.getEntry("anchorKG").getDouble(0);
 
-    SmartDashboard.putNumber("Pos", SmartDashboard.getNumber("Pos", getAnchorAngle()));
-    SmartDashboard.putNumber("Vel", SmartDashboard.getNumber("Vel", getAnchorVelocity()));
-    SmartDashboard.putNumber(
-        "Output", SmartDashboard.getNumber("Output", anchorMotor.getAppliedOutput()));
-    SmartDashboard.putNumber(
-        "Current", SmartDashboard.getNumber("Current", anchorMotor.getOutputCurrent()));
+    SmartDashboard.putNumber("Pos", this.getAnchorAngle());
+    SmartDashboard.putNumber("Output", this.anchorMotor.getAppliedOutput());
 
     this.anchorPIDController.setP(anchorKP);
     this.anchorPIDController.setI(anchorKI);
     this.anchorPIDController.setD(anchorKD);
     periodicIO.anchorPosSetpoint = setpoint;
-    Constants.Arm.Anchor.FF.kg = anchorKG;
+    Constants.Arm.Anchor.FF.ANCHOR_FEEDFORWARD = new ArmFeedforward(0, anchorKG, 0);
   }
 
   public static class PeriodicIO {
     public double anchorPosSetpoint = Constants.Arm.Anchor.kZeroPosition;
     public double floatingPosSetpoint = Constants.Arm.Floating.kZeroPosition;
-    public double anchorVelSetpoint = 0.0;
-    public double floatingVelSetpoint = 0.0;
     public double anchorFF = 0.0;
     public double floatingFF = 0.0;
-
-    // MOTION PROFILE
-    // public TrapezoidProfile anchorProfile = new
-    // TrapezoidProfile(Constants.Arm.Anchor.MP.ANCHOR_CONSTRAINTS, new TrapezoidProfile.State());
-    // public TrapezoidProfile floatingProfile = new
-    // TrapezoidProfile(Constants.Arm.Floating.MP.FLOATING_CONSTRAINTS, new
-    // TrapezoidProfile.State());
-    // public double anchorProfileStartTime = 0.0;
-    // public double floatingProfileStartTime = 0.0;
   }
 
   @Override
   public void periodic() {
-    tuneControllers();
-
-    // MOTION PROFILE
-
-    // //cal Pos & Vel at time t of MP
-    // TrapezoidProfile.State anchorProfileState =
-    // periodicIO.anchorProfile.calculate(Timer.getFPGATimestamp() -
-    // periodicIO.anchorProfileStartTime);
-    // TrapezoidProfile.State floatingProfileState =
-    // periodicIO.floatingProfile.calculate(Timer.getFPGATimestamp() -
-    // periodicIO.floatingProfileStartTime);
-
-    // //cal FF using Pos & Vel above
-    // periodicIO.anchorFF =
-    // Constants.Arm.Anchor.FF.ANCHOR_FEEDFORWARD.calculate(anchorProfileState.position,
-    // anchorProfileState.velocity);
-    // periodicIO.floatingFF =
-    // Constants.Arm.Floating.FF.FLOATING_FEEDFORWARD.calculate(floatingProfileState.position,
-    // floatingProfileState.velocity);
-
-    // //set PIDControllers to MP setpoint
-    // floatingPIDController.setReference(
-    //   floatingProfileState.position,
-    //   ControlType.kPosition,
-    //   Constants.Arm.Floating.PID.kSlot,
-    //   periodicIO.floatingFF,
-    //   SparkMaxPIDController.ArbFFUnits.kVoltage);
-    // anchorPIDController.setReference(
-    //   anchorProfileState.position,
-    //   ControlType.kPosition,
-    //   Constants.Arm.Anchor.PID.kSlot,
-    //   periodicIO.anchorFF,
-    //   SparkMaxPIDController.ArbFFUnits.kVoltage);
-
+    // tuneControllers();
+    SmartDashboard.putNumber("anchorSetpoint", periodicIO.anchorPosSetpoint);
+    SmartDashboard.putNumber("floatingSetpoint", periodicIO.floatingPosSetpoint);
+    SmartDashboard.putNumber("currentAnchorAngle", getAnchorAngle());
+    SmartDashboard.putNumber("currentFloatingAngle", getFloatingAngle());
   }
 }

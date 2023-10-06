@@ -22,13 +22,14 @@ public final class Constants {
       public static final int kAnchorPort = 22;
 
       public static final boolean kInverted = true;
-      public static final double kZeroPosition = 16.0;
-      public static final double kMinAngle = 16.0;
-      public static final double kMaxAngle = 95.0;
+      public static final double kZeroPosition = 13;
+      public static final double kMinAngle = 13;
+      public static final double kMaxAngle = 90;
       public static final boolean kEnableSoftLimit = true;
       public static final double kMaxOutput = 0.5; // going up
       public static final double kMinOutput = -0.4; // going down
       public static final int kCurrentLimit = 60; // 40 to 60
+      public static final double kAnchorLength = 40.3; // in
 
       public static final class PID {
         public static final double kP = 0;
@@ -39,34 +40,21 @@ public final class Constants {
 
       public static final class FF {
         public static final double ks = 0;
-        public static double kg = 0; // gravity FF most likely only tune this gain
+        public static double kg = 0.0; // gravity FF most likely only tune this gain
         public static final double kv = 0;
         public static final double ka = 0;
         public static ArmFeedforward ANCHOR_FEEDFORWARD = new ArmFeedforward(ks, kg, kv, ka);
       }
 
       public static final class MP {
-        public static final double maxVel = 2.0;
-        public static final double maxAccel = 1.0;
+        public static final double maxVel = 1.0;
+        public static final double maxAccel = 3.0;
         public static final TrapezoidProfile.Constraints ANCHOR_CONSTRAINTS =
             new TrapezoidProfile.Constraints(maxVel, maxAccel);
       }
 
       public static final class Conversions {
         public static final double kRatio = (90.0 - 13.0) / (27.0);
-        ;
-      }
-
-      public static enum Setpoints {
-        TEST_ANCHOR_SETPOINT(1, 0);
-
-        public double position;
-        public double velocity;
-
-        Setpoints(double position, double velocity) {
-          this.position = position;
-          this.velocity = velocity;
-        }
       }
     }
 
@@ -81,6 +69,7 @@ public final class Constants {
       public static final double kMaxOutput = 0.5; // going up
       public static final double kMinOutput = -0.5; // going down
       public static final int kCurrentLimit = 60; // 40 to 60
+      public static final double kFloatingLength = 28.0; // in
 
       public static final class PID {
         public static final double kP = 0;
@@ -110,17 +99,6 @@ public final class Constants {
       }
 
       // TODO fix this from arm setpoint vel & pos to goal setpoint for inverse kinematics
-      public static enum Setpoints {
-        TEST_FLOATING_SETPOINT(1, 0);
-
-        public double position;
-        public double velocity;
-
-        Setpoints(double position, double velocity) {
-          this.position = position;
-          this.velocity = velocity;
-        }
-      }
     }
   }
 }
