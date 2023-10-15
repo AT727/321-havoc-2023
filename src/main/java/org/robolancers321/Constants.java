@@ -60,6 +60,12 @@ public final class Constants {
 
       public static final class Conversions {
         public static final double kDegPerRot = (90.0 - 13.0) / (27.0);
+
+        public static final double kGearRatio = kDegPerRot/360; 
+        public static final double kGearRadius = 0; // m
+        public static final double kDistPerRot = kGearRatio * (2 * kGearRadius * Math.PI);
+
+
       }
     }
 
@@ -74,7 +80,7 @@ public final class Constants {
       public static final double kMaxAngle = 180;
       public static final boolean kEnableSoftLimit = true;
       public static final double kMaxOutput = 0.3; // going up
-      public static final double kMinOutput = -0.30; // going down
+      public static final double kMinOutput = -0.3; // going down
       public static final int kCurrentLimit = 50; // 40 to 60
       public static final double kTolerance = 2.0; // error within 2 degrees
 

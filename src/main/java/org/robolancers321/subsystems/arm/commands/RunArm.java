@@ -19,45 +19,44 @@ public class RunArm extends CommandBase {
 
   @Override
   public void execute() {
-    var anchorProfile =
-        new TrapezoidProfile(
-            Constants.Arm.Anchor.MP.ANCHOR_CONSTRAINTS,
-            new TrapezoidProfile.State(arm.anchorSetpoint, 0),
-            arm.getAnchorState());
-
-    var floatingProfile =
-        new TrapezoidProfile(
-            Constants.Arm.Floating.MP.FLOATING_CONSTRAINTS,
-            new TrapezoidProfile.State(arm.floatingSetpoint, 0),
-            arm.getFloatingState());
-
-    // update current state based on timestamp
-    arm.anchorState = anchorProfile.calculate(profileDT);
-    arm.floatingState = floatingProfile.calculate(profileDT);
-
-    // on loop, these states are the new inital state for the profile
-
     double anchorFF =
-        Constants.Arm.Anchor.FF.ANCHOR_FEEDFORWARD.calculate(
-            Math.toRadians(arm.anchorState.position), 0);
-    arm.setAnchorControllerReference(arm.anchorState.position, anchorFF);
+        Constants.Arm.Anchor.FF.ANCHOR_FEEDFORWARD.calculate(Math.toRadians(90 - arm.getAnchorAngle()), 0);
+    arm.setAnchorControllerReference(arm.anchorSetpoint, anchorFF);
+
+    SmartDashboard.putNumber("calculated ff", anchorFF);
+
+    double floatingFF =
+        Constants.Arm.Floating.FF.FLOATING_FEEDFORWARD.calculate(
+            Math.toRadians(arm.floatingSetpoint), 0);
+    arm.setFloatingControllerReference(arm.floatingSetpoint, 0);
+
+    // var anchorProfile =
+    // new TrapezoidProfile(
+    //     Constants.Arm.Anchor.MP.ANCHOR_CONSTRAINTS,
+    //     new TrapezoidProfile.State(arm.anchorSetpoint, 0),
+    //     new TrapezoidProfile.State(arm.anchorState.position, arm.anchorState.velocity));
+
+    // var floatingProfile =
+    //     new TrapezoidProfile(
+    //         Constants.Arm.Floating.MP.FLOATING_CONSTRAINTS,
+    //         new TrapezoidProfile.State(arm.floatingSetpoint, 0),
+    //         new TrapezoidProfile.State(arm.floatingState.position, arm.floatingState.velocity));
+
+    // // update current state based on timestamp
+    // arm.anchorState = anchorProfile.calculate(profileDT);
+    // arm.floatingState = floatingProfile.calculate(profileDT);
+
+    // // on loop, these states are the new inital state for the profile
+
+    // double anchorFF =
+    //     Constants.Arm.Anchor.FF.ANCHOR_FEEDFORWARD.calculate(
+    //         Math.toRadians(arm.anchorState.position), arm.anchorState.velocity);
+    // arm.setAnchorControllerReference(arm.anchorState.position, anchorFF);
 
     // double floatingFF =
     //     Constants.Arm.Floating.FF.FLOATING_FEEDFORWARD.calculate(
-    //         Math.toRadians(arm.floatingState.position), 0);
+    //         Math.toRadians(arm.floatingState.position), arm.floatingState.velocity);
     // arm.setFloatingControllerReference(arm.floatingState.position, floatingFF);
-
-    
-    // double anchorFF =
-    //     Constants.Arm.Anchor.FF.ANCHOR_FEEDFORWARD.calculate(Math.toRadians(90 - arm.getAnchorAngle()), 0);
-    // arm.setAnchorControllerReference(arm.anchorSetpoint, anchorFF);
-
-    // SmartDashboard.putNumber("calculated ff", anchorFF);
-
-    // // double floatingFF =
-    // //     Constants.Arm.Floating.FF.FLOATING_FEEDFORWARD.calculate(
-    // //         Math.toRadians(arm.floatingSetpoint), 0);
-    // arm.setFloatingControllerReference(arm.floatingSetpoint, 0);
 
   }
 }
