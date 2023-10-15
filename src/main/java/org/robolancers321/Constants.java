@@ -20,6 +20,9 @@ public final class Constants {
   }
 
   public static final class Arm {
+    public static double kG = 0.0;
+    public static final double kFloatingToAnchorMassRatio = 1.0 / 2.0; // according to Austin, may need tweaking
+
     public static final class Anchor {
       public static final int kAnchorPort = 22;
       public static final int kAnchorEncoderPort = 0;
