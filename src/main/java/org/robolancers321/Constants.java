@@ -21,7 +21,8 @@ public final class Constants {
 
   public static final class Arm {
     public static double kG = 0.0;
-    public static final double kFloatingToAnchorMassRatio = 1.0 / 2.0; // according to Austin, may need tweaking
+    public static final double kFloatingToAnchorMassRatio =
+        1.0 / 2.0; // according to Austin, may need tweaking
 
     public static final class Anchor {
       public static final int kAnchorPort = 22;
@@ -35,40 +36,38 @@ public final class Constants {
       public static final boolean kEnableSoftLimit = true;
       public static final double kMaxOutput = 0.5; // going up
       public static final double kMinOutput = -0.4; // going down
-      public static final int kCurrentLimit = 60; // 40 to 60
+      public static final int kCurrentLimit = 50; // 40 to 60
       public static final double kTolerance = 2.0; // error within 2 degrees
 
       public static final class PID {
-        public static final double kP = 0.018;
+        public static final double kP = 0.58; // 0.018
         public static final double kI = 0;
-        public static final double kD = 0.001;
+        public static final double kD = 0.00; // 0.001
         public static final int kSlot = 0;
       }
 
       public static final class FF {
         // change to final when done tuning
         public static double kS = 0;
-        public static double kG = 0.72; // gravity FF most likely only tune this gain
+        public static double kG = 0.72;
         public static final double kV = 0;
         public static final double kA = 0;
         public static ArmFeedforward ANCHOR_FEEDFORWARD = new ArmFeedforward(kS, kG, kV, kA);
       }
 
       public static final class MP {
-        public static final double maxVel = 2.0;
-        public static final double maxAccel = 1.0;
-        public static final TrapezoidProfile.Constraints ANCHOR_CONSTRAINTS =
+        public static double maxVel = 8.0;
+        public static double maxAccel = 8.0;
+        public static TrapezoidProfile.Constraints ANCHOR_CONSTRAINTS =
             new TrapezoidProfile.Constraints(maxVel, maxAccel);
       }
 
       public static final class Conversions {
         public static final double kDegPerRot = (90.0 - 13.0) / (27.0);
 
-        public static final double kGearRatio = kDegPerRot/360; 
+        public static final double kGearRatio = kDegPerRot / 360;
         public static final double kGearRadius = 0; // m
         public static final double kDistPerRot = kGearRatio * (2 * kGearRadius * Math.PI);
-
-
       }
     }
 
@@ -88,7 +87,7 @@ public final class Constants {
       public static final double kTolerance = 2.0; // error within 2 degrees
 
       public static final class PID {
-        public static final double kP = 0.7;
+        public static final double kP = 0.0; // 0.7
         public static final double kI = 0;
         public static final double kD = 0;
         public static final int kSlot = 0;
@@ -112,7 +111,7 @@ public final class Constants {
       }
 
       public static final class Conversions {
-        public static final double kDegPerRot = 360/72; //(180-22) / 27.81;
+        public static final double kDegPerRot = 360 / 72; // (180-22) / 27.81;
       }
     }
 
@@ -122,7 +121,6 @@ public final class Constants {
       private double anchor;
       private double floating;
 
-     
       ArmSetpoints(double y, double z) {
         InverseArmKinematics.Output angles = InverseArmKinematics.calculate(y, z);
 
@@ -137,7 +135,6 @@ public final class Constants {
       public double getFloating() {
         return this.floating;
       }
-
     }
   }
 }
