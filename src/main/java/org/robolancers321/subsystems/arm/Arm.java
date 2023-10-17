@@ -83,7 +83,7 @@ public class Arm extends SubsystemBase {
     floatingEncoder.setPosition(Constants.Arm.Floating.kZeroPosition);
 
     // only need for Motion Profile
-    // anchorEncoder.setVelocityConversionFactor(Constants.Arm.Anchor.Conversions.kDistPerRot);
+    anchorEncoder.setVelocityConversionFactor(Constants.Arm.Anchor.Conversions.kDegPerRotVEL);
     // floatingEncoder.setVelocityConversionFactor(Constants.Arm.Floating.Conversions.kDistPerRot);
   }
 
@@ -218,8 +218,8 @@ public class Arm extends SubsystemBase {
 
     Constants.Arm.Anchor.FF.kG = anchorKG;
     Constants.Arm.Anchor.FF.kS = anchorKS;
-    Constants.Arm.Anchor.MP.maxVel = anchorMaxVel;
-    Constants.Arm.Anchor.MP.maxAccel = anchorMaxAccel;
+
+    Constants.Arm.Anchor.MP.ANCHOR_CONSTRAINTS = new TrapezoidProfile.Constraints(anchorMaxVel, anchorMaxAccel);
 
     // double floatingSetpoint = SmartDashboard.getEntry("floatingSetpoint").getDouble(0);
     // double floatingKP = SmartDashboard.getEntry("floatingKP").getDouble(0);

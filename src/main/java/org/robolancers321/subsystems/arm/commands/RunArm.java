@@ -2,6 +2,7 @@
 package org.robolancers321.subsystems.arm.commands;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import org.robolancers321.Constants;
 import org.robolancers321.subsystems.arm.Arm;
@@ -52,6 +53,8 @@ public class RunArm extends CommandBase {
     arm.anchorState = anchorProfile.calculate(profileDT);
     arm.floatingState = floatingProfile.calculate(profileDT);
 
+    SmartDashboard.putNumber("anchorAngleMP", arm.anchorState.position);
+
     // on loop, these states are the new inital state for the profile
 
     double anchorFF =
@@ -63,5 +66,7 @@ public class RunArm extends CommandBase {
         Constants.Arm.Floating.FF.FLOATING_FEEDFORWARD.calculate(
             Math.toRadians(arm.floatingState.position), arm.floatingState.velocity);
     arm.setFloatingControllerReference(arm.floatingState.position, floatingFF);
+
+    // arm.setAnchorState(arm.getAnchorAngle(), arm.getAnchorVelocity());
   }
 }
