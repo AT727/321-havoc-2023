@@ -1,6 +1,7 @@
 /* (C) Robolancers 2024 */
 package org.robolancers321.subsystems.arm.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import org.robolancers321.Constants;
 import org.robolancers321.Constants.Arm.ArmSetpoints;
@@ -22,22 +23,16 @@ public class MoveToSetpoint extends CommandBase {
 
   @Override
   public void initialize() {
-    arm.anchorSetpoint = anchorPosSetpoint;
-    arm.floatingSetpoint = floatingPosSetpoint;
+    // arm.anchorSetpoint = anchorPosSetpoint;
+    // arm.floatingSetpoint = floatingPosSetpoint;
 
-    // MOTION PROFILE
-    // arm.periodicIO.anchorProfile = new TrapezoidProfile(
-    //   Constants.Arm.Anchor.MP.ANCHOR_CONSTRAINTS,
-    //   new TrapezoidProfile.State(anchorPosSetpoint, 0),
-    //   new TrapezoidProfile.State(arm.getAnchorAngle(), arm.getAnchorVelocity()));
 
-    // arm.periodicIO.floatingProfile = new TrapezoidProfile(
-    //    Constants.Arm.Floating.MP.FLOATING_CONSTRAINTS,
-    //    new TrapezoidProfile.State(floatingPosSetpoint, 0),
-    //    new TrapezoidProfile.State(arm.getFloatingAngle(), arm.getFloatingVelocity()));
+    SmartDashboard.putNumber("anchorIK", anchorPosSetpoint);
+    SmartDashboard.putNumber("floatingIK", floatingPosSetpoint);
 
-    // arm.periodicIO.anchorProfileStartTime = Timer.getFPGATimestamp();
-    // arm.periodicIO.floatingProfileStartTime = Timer.getFPGATimestamp();
+    
+
+   
   }
 
   @Override

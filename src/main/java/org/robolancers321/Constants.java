@@ -49,7 +49,7 @@ public final class Constants {
       public static final class FF {
         // change to final when done tuning
         public static double kS = 0;
-        public static double kG = 0.72;
+        public static double kG = 1.4;
         public static final double kV = 0;
         public static final double kA = 0;
         public static ArmFeedforward ANCHOR_FEEDFORWARD = new ArmFeedforward(kS, kG, kV, kA);
@@ -109,8 +109,8 @@ public final class Constants {
       }
 
       public static final class MP {
-        public static final double maxVel = 1.0;
-        public static final double maxAccel = 1.0;
+        public static final double maxVel = 20;
+        public static final double maxAccel = 20;
         public static final TrapezoidProfile.Constraints FLOATING_CONSTRAINTS =
             new TrapezoidProfile.Constraints(maxVel, maxAccel);
       }

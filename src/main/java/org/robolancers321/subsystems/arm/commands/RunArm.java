@@ -59,12 +59,12 @@ public class RunArm extends CommandBase {
 
     double anchorFF =
         Constants.Arm.Anchor.FF.ANCHOR_FEEDFORWARD.calculate(
-            Math.toRadians(arm.anchorState.position), 0);
+            Math.toRadians(90 - arm.anchorState.position), 0);
     arm.setAnchorControllerReference(arm.anchorState.position, anchorFF);
 
     double floatingFF =
         Constants.Arm.Floating.FF.FLOATING_FEEDFORWARD.calculate(
-            Math.toRadians(arm.floatingState.position), arm.floatingState.velocity);
+            Math.toRadians(arm.floatingState.position), 0);
     arm.setFloatingControllerReference(arm.floatingState.position, floatingFF);
 
     // arm.setAnchorState(arm.getAnchorAngle(), arm.getAnchorVelocity());

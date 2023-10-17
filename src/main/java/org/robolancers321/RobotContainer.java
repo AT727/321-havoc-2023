@@ -3,7 +3,10 @@ package org.robolancers321;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
+import org.robolancers321.Constants.Arm.ArmSetpoints;
 import org.robolancers321.subsystems.arm.Arm;
+import org.robolancers321.subsystems.arm.commands.MoveToSetpoint;
 import org.robolancers321.subsystems.arm.commands.RunArm;
 
 public class RobotContainer {
@@ -14,6 +17,8 @@ public class RobotContainer {
 
   public RobotContainer() {
     this.arm.setDefaultCommand(new RunArm(arm));
+
+    controller.y().whileTrue(new MoveToSetpoint(arm, ArmSetpoints.TEST));
 
     configureBindings();
 

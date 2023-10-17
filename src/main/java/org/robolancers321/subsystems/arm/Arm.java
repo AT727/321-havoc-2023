@@ -10,6 +10,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -216,25 +217,22 @@ public class Arm extends SubsystemBase {
         MathUtil.clamp(
             anchorSetpoint, Constants.Arm.Anchor.kMinAngle, Constants.Arm.Anchor.kMaxAngle);
 
-    Constants.Arm.Anchor.FF.kG = anchorKG;
-    Constants.Arm.Anchor.FF.kS = anchorKS;
+    Constants.Arm.Anchor.FF.ANCHOR_FEEDFORWARD = new ArmFeedforward(0, anchorKG, 0);
 
     Constants.Arm.Anchor.MP.ANCHOR_CONSTRAINTS = new TrapezoidProfile.Constraints(anchorMaxVel, anchorMaxAccel);
 
-    // double floatingSetpoint = SmartDashboard.getEntry("floatingSetpoint").getDouble(0);
-    // double floatingKP = SmartDashboard.getEntry("floatingKP").getDouble(0);
-    // double floatingKI = SmartDashboard.getEntry("floatingKI").getDouble(0);
-    // double floatingKD = SmartDashboard.getEntry("floatingKD").getDouble(0);
-    // double floatingKS = SmartDashboard.getEntry("floatingKS").getDouble(0);
+    double floatingSetpoint = SmartDashboard.getEntry("floatingSetpoint").getDouble(0);
+    double floatingKP = SmartDashboard.getEntry("floatingKP").getDouble(0);
+    double floatingKI = SmartDashboard.getEntry("floatingKI").getDouble(0);
+    double floatingKD = SmartDashboard.getEntry("floatingKD").getDouble(0);
 
-    // SmartDashboard.putNumber("Pos", this.getFloatingAngle());
+    SmartDashboard.putNumber("floatingAngle", getFloatingAngle());
     // SmartDashboard.putNumber("Output", this.floatingMotor.getAppliedOutput());
 
-    // this.floatingPIDController.setP(floatingKP);
-    // this.floatingPIDController.setI(floatingKI);
-    // this.floatingPIDController.setD(floatingKD);
-    // this.floatingSetpoint = MathUtil.clamp(floatingSetpoint, Constants.Arm.Floating.kMinAngle,
-    // Constants.Arm.Floating.kMaxAngle);
+    this.floatingPIDController.setP(floatingKP);
+    this.floatingPIDController.setI(floatingKI);
+    this.floatingPIDController.setD(floatingKD);
+    this.floatingSetpoint = MathUtil.clamp(floatingSetpoint, Constants.Arm.Floating.kMinAngle, Constants.Arm.Floating.kMaxAngle);
   }
 
   public double calculateCustomAnchorFeedforward() {
