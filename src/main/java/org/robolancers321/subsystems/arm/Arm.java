@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import org.littletonrobotics.junction.Logger;
 import org.robolancers321.Constants;
 import org.robolancers321.Constants.RawArmSetpoints;
 
@@ -40,6 +42,8 @@ public class Arm extends SubsystemBase {
   public double anchorSetpoint;
   public double floatingSetpoint;
   public double kG = 0.044;
+
+  private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
 
   // public TrapezoidProfile anchorProfile = new
   // TrapezoidProfile(Constants.Arm.Anchor.ANCHOR_CONSTRAINTS, new TrapezoidProfile.State());
@@ -398,6 +402,10 @@ public class Arm extends SubsystemBase {
     // SmartDashboard.putNumber("floatingAngleIK", angles.anchor - angles.floating);
 
     tuneControllers();
+
+    Logger.getInstance().recordOutput("Anchor/Position ", inputs.anchorPosition);
+    Logger.getInstance().recordOutput("Floating/Position ", inputs.floatingPosition);
+
     // SmartDashboard.putNumber("anchorAngle", getAnchorAngle());
     // SmartDashboard.putNumber("floatingAngle", getFloatingAngle());
     // SmartDashboard.putNumber("anchorSetpoint", getAnchorSetpoint());
